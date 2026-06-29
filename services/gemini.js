@@ -18,7 +18,18 @@ export async function analyzeImage(imageBase64) {
             {
               parts: [
                 {
-                  text: "Describe this image.",
+                  text: `
+Analyze this image.
+
+Give the response in this format:
+
+Object:
+Condition:
+Details:
+Recommendation:
+
+Be specific and concise.
+`,
                 },
 
                 {

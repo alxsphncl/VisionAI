@@ -1,4 +1,3 @@
-// TEST IMPORT
 import * as FileSystem from "expo-file-system/legacy";
 import { router, useLocalSearchParams } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -18,6 +17,7 @@ export default function PreviewScreen() {
       pathname: "/result",
       params: {
         result: result,
+        photo: photo,
       },
     });
   }
