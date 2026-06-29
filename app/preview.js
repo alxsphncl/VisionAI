@@ -1,18 +1,32 @@
 // TEST IMPORT
+import * as FileSystem from "expo-file-system";
 import { router, useLocalSearchParams } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { analyzeImage } from "../services/gemini";
 
 export default function PreviewScreen() {
   const { photo } = useLocalSearchParams();
+
+  async function handleAnalyze() {
+    const base64 = await FileSystem.readAsStringAsync(photo, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    const result = await analyzeImage(base64);
+
+    router.push({
+      pathname: "/result",
+      params: {
+        result: result,
+      },
+    });
+  }
 
   return (
     <View style={styles.container}>
       <Image source={{ uri: photo }} style={styles.image} />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push("/result")}
-      >
+      <TouchableOpacity style={styles.button} onPress={handleAnalyze}>
         <Text style={styles.buttonText}>Analyze Image</Text>
       </TouchableOpacity>
     </View>
