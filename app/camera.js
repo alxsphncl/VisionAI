@@ -1,13 +1,12 @@
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { useRef, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { router } from "expo-router";
+import { useRef } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
 
-  const cameraRef = useRef<CameraView | null>(null);
-
-  const [photo, setPhoto] = useState<string | null>(null);
+  const cameraRef = useRef(null);
 
   async function takePicture() {
     if (!cameraRef.current) return;
@@ -16,9 +15,14 @@ export default function CameraScreen() {
       quality: 0.7,
     });
 
-    setPhoto(result.uri);
-
     console.log(result.uri);
+
+    router.push({
+      pathname: "/preview",
+      params: {
+        photo: result.uri,
+      },
+    });
   }
 
   if (!permission) {
@@ -46,8 +50,6 @@ export default function CameraScreen() {
     <View style={styles.container}>
       <CameraView ref={cameraRef} style={styles.camera} facing="back" />
 
-      {photo && <Image source={{ uri: photo }} style={styles.preview} />}
-
       <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
         <Text style={styles.captureButtonText}>Capture</Text>
       </TouchableOpacity>
@@ -62,14 +64,6 @@ const styles = StyleSheet.create({
 
   camera: {
     flex: 1,
-  },
-
-  preview: {
-    width: 150,
-    height: 150,
-    position: "absolute",
-    top: 40,
-    right: 20,
   },
 
   permissionContainer: {
