@@ -1,5 +1,5 @@
 // TEST IMPORT
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import { router, useLocalSearchParams } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { analyzeImage } from "../services/gemini";
@@ -9,7 +9,7 @@ export default function PreviewScreen() {
 
   async function handleAnalyze() {
     const base64 = await FileSystem.readAsStringAsync(photo, {
-      encoding: FileSystem.EncodingType.Base64,
+      encoding: "base64",
     });
 
     const result = await analyzeImage(base64);
